@@ -5,7 +5,7 @@
 
 using namespace std;
 
-
+bool isValidHash(const string *hash);
 void crack(const string *hash, const string *wordlist_path, string *cleartext);
 void usage(char *argv[]);
 

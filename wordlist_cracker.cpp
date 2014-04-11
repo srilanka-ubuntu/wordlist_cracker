@@ -1,12 +1,14 @@
 #include <iostream>
+#include <locale>
 #include <cstdlib>
 #include <fstream>
 #include "md5.h"
 
 using namespace std;
 
+void convertToLower(string *hash);
 bool isValidHash(const string *hash);
-void crack(const string *hash, const string *wordlist_path, string *cleartext);
+void crack(string *hash, const string *wordlist_path, string *cleartext);
 void usage(char *argv[]);
 
 int main(int argc, char *argv[])
@@ -64,8 +66,15 @@ int main(int argc, char *argv[])
    array, when a char was found which is not inside the array, the hash is invalid. */
 bool isValidHash(const string *hash)
 {
-    const char allowed_chars[] = {'a', 'b', 'c', 'd', 'e', 'f', '1', '2', '3',
-                                  '4', '5', '6', '7', '8', '9', '0'};
+    // A valid MD5 hash must be 32 chars in length
+    if(hash->size() != 32)
+    {
+        return false;
+    }
+
+    const char allowed_chars[] = {'a', 'b', 'c', 'd', 'e', 'f', 'A', 'B', 'C',
+                                  'D', 'E', 'F', '1', '2', '3', '4', '5', '6',
+                                  '7', '8', '9', '0'};
 
     for(char c : *hash)
     {
@@ -88,10 +97,25 @@ bool isValidHash(const string *hash)
     return true;
 }
 
+// Converts an upper case string to lower case.
+void convertToLower(string *hash)
+{
+    locale loc;
+    string buffer;
+    for(char c : *hash)
+    {
+        buffer += tolower(c, loc);
+    }
+
+    *hash = buffer;
+}
+
 /* Tries to find the passed hash inside the wordlist, stores the found cleartext
    inside the "cleartext" pointer. */
-void crack(const string *hash, const string *wordlist_path, string *cleartext)
+void crack(string *hash, const string *wordlist_path, string *cleartext)
 {
+    convertToLower(hash);
+
     // Make sure the passed hash is a valid md5 hash
     if(!isValidHash(hash))
     {

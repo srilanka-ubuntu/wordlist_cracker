@@ -72,9 +72,8 @@ bool isValidHash(const string *hash)
         return false;
     }
 
-    const char allowed_chars[] = {'a', 'b', 'c', 'd', 'e', 'f', 'A', 'B', 'C',
-                                  'D', 'E', 'F', '1', '2', '3', '4', '5', '6',
-                                  '7', '8', '9', '0'};
+    const char allowed_chars[] = {'a', 'b', 'c', 'd', 'e', 'f', '1', '2', '3', '4',
+                                  '5', '6', '7', '8', '9', '0'};
 
     for(char c : *hash)
     {
